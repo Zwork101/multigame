@@ -1,0 +1,8 @@
+{
+  "ip_addr": "127.0.0.1",
+  "port": 5312,
+  "max_clients": 10,
+  "welcome_msg": "Hello! Welcome to my ONLINE game!",
+  "secret": "This is my super secret secret",
+  "window_size": [300, 300]
+}
