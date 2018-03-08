@@ -1,8 +1,6 @@
 from json import load
 from uuid import uuid4, uuid5
 
-from pygame import Rect
-
 from quicknet.event import ClientWorker
 from quicknet.server import QServer
 
@@ -19,8 +17,7 @@ def new_connection(_, addr):
                           SETTINGS['secret']))  # Prevent timing attacks
     ClientWorker.emit("WELCOME",
                       SETTINGS['welcome_msg'], client_id, PLAYERS)
-    PLAYERS[client_id] = Rect(SETTINGS['window_size'][0] / 2,
-                              SETTINGS['window_size'][1] / 2, 50, 50)
+    PLAYERS[client_id] = [SETTINGS['window_size'][0] / 2, SETTINGS['window_size'][1] / 2]
     server.broadcast("NEW_PLAYER", client_id, PLAYERS[client_id])
     ClientWorker.info["id"] = client_id
 
@@ -28,13 +25,13 @@ def new_connection(_, addr):
 @server.on("MOVE")
 def move_player(dir):
     if dir == "UP":
-        PLAYERS[ClientWorker.info["id"]].y -= 10
+        PLAYERS[ClientWorker.info["id"]][1] -= 10
     elif dir == "DOWN":
-        PLAYERS[ClientWorker.info["id"]].y += 10
+        PLAYERS[ClientWorker.info["id"]][1] += 10
     elif dir == "LEFT":
-        PLAYERS[ClientWorker.info["id"]].x -= 10
+        PLAYERS[ClientWorker.info["id"]][0] -= 10
     elif dir == "RIGHT":
-        PLAYERS[ClientWorker.info["id"]].x += 10
+        PLAYERS[ClientWorker.info["id"]][0] += 10
     server.broadcast("PLAYER_MOVED", ClientWorker.info["id"],
                      PLAYERS[ClientWorker.info["id"]])
 

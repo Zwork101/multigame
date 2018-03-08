@@ -22,14 +22,14 @@ def welcome_client(msg, id, players):
 
 
 @game_client.on("PLAYER_MOVED")
-def move_player(player_name, rect):
-    PLAYERS[player_name] = rect
+def move_player(player_name, xy):
+    PLAYERS[player_name] = xy
 
 
 @game_client.on("NEW_PLAYER")
-def new_player(player_name, rect):
+def new_player(player_name, xy):
     print("New Player!", player_name)
-    PLAYERS[player_name] = rect
+    PLAYERS[player_name] = xy
 
 
 pygame.init()
@@ -44,6 +44,7 @@ while RUN:
         if event.type == QUIT:
             print("Exiting")
             RUN = False
+            game_client.quit()
         elif event.type == KEYDOWN:
             if event.key == K_UP:
                 game_client.call("MOVE", "UP")
@@ -58,9 +59,11 @@ while RUN:
 
     for player, rect in PLAYERS.items():
         if player == SELF:
-            pygame.draw.rect(screen, (100, 100, 100), rect)
+            r = pygame.Rect(rect[0], rect[1], 50, 50)
+            pygame.draw.rect(screen, (100, 100, 100), r)
         else:
-            pygame.draw.rect(screen, (200, 100, 200), rect)
+            r = pygame.Rect(rect[0], rect[1], 50, 50)
+            pygame.draw.rect(screen, (200, 100, 200), r)
 
     pygame.display.flip()
     clock.tick(30)
